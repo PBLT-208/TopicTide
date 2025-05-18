@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TopicTide - Consumer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>TopicTide Consumer</h1>
+
+    <div class="subscribe-box">
+      <input type="text" id="topicInput" placeholder="Enter topic to subscribe" />
+      <button onclick="subscribeTopic()">Subscribe</button>
+    </div>
+
+    <div class="subscribed-list">
+      <h2>Subscribed Topics:</h2>
+      <ul id="topicList"></ul>
+    </div>
+
+    <div class="message-section">
+      <h2>Messages:</h2>
+      <button onclick="fetchMessages()">Fetch Messages</button>
+      <div id="messagesBox"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
