@@ -1,0 +1,117 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.page-header {
+  text-align: center;
+  background-color: #2563eb;
+  color: white;
+  padding: 15px 0;
+  margin-bottom: 0;
+}
+
+.main-container {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: calc(100vh - 70px); /* header height compensation */
+}
+
+.left-panel, .center-panel, .right-panel {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.left-panel {
+  flex: 1;
+  min-width: 200px;
+  background-color: #e0f2fe;
+  border-right: 2px solid #93c5fd;
+}
+
+.center-panel {
+  flex: 2;
+  background-color: #fefce8;
+  border-left: 2px solid #fde68a;
+  border-right: 2px solid #fde68a;
+}
+
+.right-panel {
+  flex: 1;
+  min-width: 200px;
+  background-color: #e7f5e6;
+  border-left: 2px solid #86efac;
+}
+
+select, button {
+  padding: 8px;
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}
+
+.unsubscribe-btn {
+  background-color: #ef4444;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  border: none;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.unsubscribe-btn:hover {
+  background-color: #dc2626;
+}
+
+.get-msg-btn {
+  background-color: #22c55e;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  border: none;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.get-msg-btn:hover {
+  background-color: #16a34a;
+}
+
+#subscriptions li {
+  margin: 8px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+#messagesBox {
+  margin-top: 20px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}

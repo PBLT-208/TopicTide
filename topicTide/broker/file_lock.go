@@ -36,6 +36,26 @@ func encryptData(data []byte) ([]byte, error) {
 	return ciphertext, nil
 }
 
+// AES-128 decryption function
+func DecryptData(encryptedData []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(encryptedData) < aes.BlockSize {
+		return nil, err
+	}
+
+	iv := encryptedData[:aes.BlockSize]
+	encryptedData = encryptedData[aes.BlockSize:]
+
+	stream := cipher.NewCFBDecrypter(block, iv)
+	stream.XORKeyStream(encryptedData, encryptedData)
+
+	return encryptedData, nil
+}
+
 // Write encrypted data to file, base64 encoded
 func WriteToFile(filePath string, data []byte) error {
 
@@ -63,7 +83,3 @@ func WriteToFile(filePath string, data []byte) error {
 	log.Println("Encrypted message written to file successfully.")
 	return nil
 }
-
-
-
-

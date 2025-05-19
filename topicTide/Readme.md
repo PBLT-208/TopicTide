@@ -54,7 +54,7 @@ c. main.go: Entry point of the broker application. Listens for connections.
 
 In main.go:
 
-1. Listen request of producer and consumer and forward it to broker.go
+1. Listen request of producer and forward it to broker.go
 
 In broker.go: 
 
@@ -67,3 +67,21 @@ In topic_manager.go:
 In file_lock.go:
 
 1. Encrypt the content and apply lock to avoid critical conditions and then only write to a file
+
+<<ESTABLISHING BROKER AND CONSUMER CONNECTION>>
+
+1. Broker is running on port 8080.
+2. Consumers connect via HTTP.
+
+In main.go:
+
+1. Listen request of Consumer and forward it to broker.go.
+
+In broker.go: 
+
+1. Handle consumer HTTP request, fetch the requested message, decrypt it and return decrypted message. 
+2. Send list of topics to consumer front-end to handle subscriptions.
+
+In file_lock.go:
+
+1. Decrypt the requested encrypted content.
