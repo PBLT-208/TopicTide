@@ -1,4 +1,4 @@
-let producerSocket = new WebSocket('ws://localhost:8080/producer');
+let producerSocket = new WebSocket('wss://topictide.onrender.com/producer');
 
 console.log("Attempting to connect to WebSocket..."); 
 

@@ -7,7 +7,7 @@ window.onload = async () => {
 
 async function listTopics() {
   try {
-    const res = await fetch("http://localhost:8080/topics");
+    const res = await fetch("https://topictide.onrender.com/topics");
     const topics = await res.json();
     availableTopics = topics;
     populateDropdown();
@@ -81,7 +81,7 @@ async function fetchMessages(topic) {
   messagesBox.innerHTML = "Fetching messages...";
 
   try {
-    const res = await fetch(`http://localhost:8080/consumer?topic=${encodeURIComponent(topic)}`);
+    const res = await fetch(`/consumer?topic=${encodeURIComponent(topic)}`);
     const data = await res.json();
 
     if (Array.isArray(data)) {
