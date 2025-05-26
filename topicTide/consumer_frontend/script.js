@@ -7,12 +7,31 @@ window.onload = async () => {
 
 async function listTopics() {
   try {
-    const res = await fetch("https://topictide.onrender.com/topics");
-    const topics = await res.json();
-    availableTopics = topics;
-    populateDropdown();
+    const socket = new WebSocket("ws://localhost:8080/topics");
+
+    socket.onopen = () => {
+      console.log("Connected to /topics WebSocket");
+      socket.send("list"); // optional, just to trigger server read
+    };
+
+    socket.onmessage = (event) => {
+      try {
+        const topics = JSON.parse(event.data);
+        availableTopics = topics;
+        populateDropdown();
+      } catch (err) {
+        console.error("Error parsing topic list:", err);
+      } finally {
+        socket.close();
+      }
+    };
+
+    socket.onerror = (err) => {
+      console.error("WebSocket error (topics):", err);
+    };
+
   } catch (err) {
-    console.error("Error loading topics:", err);
+    console.error("Error initializing topic list:", err);
   }
 }
 
@@ -73,33 +92,40 @@ function updateSubscriptionList() {
   });
 }
 
-async function fetchMessages(topic) {
+let socket = null;
+
+function fetchMessages(topic) {
   const messagesBox = document.getElementById("messagesBox");
   const messageTitle = document.getElementById("messageTitle");
 
   messageTitle.textContent = `Messages for: ${topic}`;
-  messagesBox.innerHTML = "Fetching messages...";
+  messagesBox.innerHTML = "";
 
-  try {
-    const res = await fetch(`/consumer?topic=${encodeURIComponent(topic)}`);
-    const data = await res.json();
-
-    if (Array.isArray(data)) {
-      messagesBox.innerHTML = "";
-      data.forEach(msg => {
-        const p = document.createElement("p");
-        p.textContent = `${msg}`;
-        messagesBox.appendChild(p);
-      });
-
-      if (messagesBox.innerHTML === "") {
-        messagesBox.innerHTML = "No messages for this topic.";
-      }
-    } else {
-      messagesBox.innerHTML = "Invalid response from server.";
-    }
-  } catch (error) {
-    messagesBox.innerHTML = "Error fetching messages.";
-    console.error(error);
+  // Close previous socket if open
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    socket.close();
   }
+
+  socket = new WebSocket("ws://localhost:8080/consumer");
+
+  socket.onopen = () => {
+    console.log("WebSocket connected");
+    socket.send(topic); // Send topic name to broker
+  };
+
+  socket.onmessage = (event) => {
+    // Display message
+    const p = document.createElement("p");
+    p.textContent = event.data;
+    messagesBox.appendChild(p);
+  };
+
+  socket.onerror = (error) => {
+    console.error("WebSocket error:", error);
+    messagesBox.innerHTML += "<p style='color:red;'>Connection error.</p>";
+  };
+
+  socket.onclose = () => {
+    console.log("WebSocket closed");
+  };
 }

@@ -11,8 +11,9 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 	"topicTide/communication_protocol"
-	
+
 	"github.com/gorilla/websocket"
 )
 
@@ -89,7 +90,7 @@ func HandleProducer(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleConsumer(w http.ResponseWriter, r *http.Request) {
-	// Handle CORS
+	// Handle CORS for WebSocket Upgrade
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -99,70 +100,96 @@ func HandleConsumer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("Consumer HTTP Request received!")
-
-	// Get topic from query parameter
-	topic := r.URL.Query().Get("topic")
-	if topic == "" {
-		http.Error(w, "Missing topic parameter", http.StatusBadRequest)
-		return
-	}
-
-	topicFile := filepath.Join("topicFiles", sanitizeFilename(topic)+".txt")
-	file, err := os.Open(topicFile)
+	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("Error opening topic file:", err)
-		http.Error(w, "Topic file not found", http.StatusNotFound)
+		log.Println("WebSocket Upgrade error:", err)
 		return
 	}
-	defer file.Close()
+	defer conn.Close()
 
-	// Read entire file content
-	// Prepare plain message array
-	var messages []string
+	log.Println("WebSocket connection established with consumer.")
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if line == "" {
-			continue
-		}
-
-		// Decode Base64
-		encryptedData, err := base64.StdEncoding.DecodeString(line)
+	for {
+		// Read topic name from consumer
+		_, msg, err := conn.ReadMessage()
 		if err != nil {
-			log.Println("Base64 decoding error:", err)
+			log.Println("Error reading from WebSocket:", err)
+			break
+		}
+
+		topic := string(msg)
+		if topic == "" {
+			log.Println("Empty topic received")
 			continue
 		}
 
-		// Decrypt
-		decrypted, err := DecryptData(encryptedData)
+		topicFile := filepath.Join("topicFiles", sanitizeFilename(topic)+".txt")
+		file, err := os.Open(topicFile)
 		if err != nil {
-			log.Println("Decryption error:", err)
+			log.Println("Error opening topic file:", err)
+			conn.WriteMessage(websocket.TextMessage, []byte("Error: topic not found"))
 			continue
 		}
+		defer file.Close()
 
-		messages = append(messages, string(decrypted))
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			line := scanner.Text()
+			if line == "" {
+				continue
+			}
+
+			// Decode Base64
+			encryptedData, err := base64.StdEncoding.DecodeString(line)
+			if err != nil {
+				log.Println("Base64 decode error:", err)
+				continue
+			}
+
+			// Decrypt
+			decrypted, err := DecryptData(encryptedData)
+			if err != nil {
+				log.Println("Decryption error:", err)
+				continue
+			}
+
+			// Send decrypted message to consumer
+			err = conn.WriteMessage(websocket.TextMessage, decrypted)
+			if err != nil {
+				log.Println("Write error:", err)
+				break
+			}
+			time.Sleep(200 * time.Millisecond) // Optional pacing
+		}
+
+		if err := scanner.Err(); err != nil {
+			log.Println("File scanning error:", err)
+		}
 	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(messages)
 }
 
 // ListTopics handles listing all available topic names
 func ListTopics(w http.ResponseWriter, r *http.Request) {
-	// Handle CORS
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	// WebSocket Upgrade
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println("WebSocket upgrade error in ListTopics:", err)
+		return
+	}
+	defer conn.Close()
+	fmt.Println("ListTopics WebSocket connection established.")
 
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(http.StatusOK)
+	// Read request (optional, in case client sends a trigger message)
+	_, _, err = conn.ReadMessage()
+	if err != nil {
+		log.Println("WebSocket read error:", err)
 		return
 	}
 
 	files, err := os.ReadDir("topicFiles")
 	if err != nil {
-		http.Error(w, "Failed to read topics", http.StatusInternalServerError)
+		log.Println("Error reading topicFiles:", err)
+		conn.WriteMessage(websocket.TextMessage, []byte(`{"error": "Failed to read topics"}`))
 		return
 	}
 
@@ -174,12 +201,12 @@ func ListTopics(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(topics)
-}
+	topicData, err := json.Marshal(topics)
+	if err != nil {
+		log.Println("Error marshaling topic list:", err)
+		conn.WriteMessage(websocket.TextMessage, []byte(`{"error": "Internal error"}`))
+		return
+	}
 
-func Broker() {
-	http.HandleFunc("/producer", HandleProducer)
-	fmt.Println("Broker is running at http://localhost:8080/producer")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	conn.WriteMessage(websocket.TextMessage, topicData)
 }
