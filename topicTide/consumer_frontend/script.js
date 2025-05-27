@@ -7,7 +7,7 @@ window.onload = async () => {
 
 async function listTopics() {
   try {
-    const socket = new WebSocket("ws://localhost:8080/topics");
+    const socket = new WebSocket("wss://topictide.onrender.com/topics");
 
     socket.onopen = () => {
       console.log("Connected to /topics WebSocket");
@@ -106,7 +106,7 @@ function fetchMessages(topic) {
     socket.close();
   }
 
-  socket = new WebSocket("ws://localhost:8080/consumer");
+  socket = new WebSocket("wss://topictide.onrender.com/consumer?topic=" + encodeURIComponent(topic));
 
   socket.onopen = () => {
     console.log("WebSocket connected");
