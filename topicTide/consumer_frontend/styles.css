@@ -1,117 +1,172 @@
+/* GLOBAL RESET */
 * {
   box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111827; /* Dark background */
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
+  color: #f3f4f6; /* Light text */
 }
 
+/* HEADER */
 .page-header {
   text-align: center;
-  background-color: #2563eb;
-  color: white;
-  padding: 15px 0;
-  margin-bottom: 0;
+  background: linear-gradient(to right, #0f172a, #1e293b);
+    text-align: center;
+    color: #38bdf8;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+
+  padding: 20px 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
 }
 
+/* LAYOUT */
 .main-container {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   width: 100%;
-  height: calc(100vh - 70px); /* header height compensation */
+  height: calc(100vh - 80px);
 }
 
-.left-panel, .center-panel, .right-panel {
+/* PANELS */
+.left-panel,
+.center-panel,
+.right-panel {
   padding: 20px;
   overflow-y: auto;
+  min-height: 300px;
 }
 
 .left-panel {
   flex: 1;
-  min-width: 200px;
-  background-color: #e0f2fe;
-  border-right: 2px solid #93c5fd;
+  min-width: 240px;
+  background-color: #1f2937;
+  border-right: 1px solid #374151;
 }
 
 .center-panel {
   flex: 2;
-  background-color: #fefce8;
-  border-left: 2px solid #fde68a;
-  border-right: 2px solid #fde68a;
+  min-width: 300px;
+  background-color: #111827;
+  border-left: 1px solid #374151;
+  border-right: 1px solid #374151;
 }
 
 .right-panel {
   flex: 1;
-  min-width: 200px;
-  background-color: #e7f5e6;
-  border-left: 2px solid #86efac;
+  min-width: 240px;
+  background-color: #1f2937;
+  border-left: 1px solid #374151;
 }
 
-select, button {
-  padding: 8px;
-  margin-top: 10px;
+/* FORM ELEMENTS */
+select,
+button {
+  padding: 10px;
+  margin-top: 12px;
   width: 100%;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  font-size: 1rem;
+  background-color: #111827;
+  color: #f9fafb;
 }
 
 button {
-  background-color: #2563eb;
+  background-color: #3b82f6;
   color: white;
-  cursor: pointer;
+  font-weight: 500;
 }
 
 button:hover {
-  background-color: #1d4ed8;
+  background-color: #2563eb;
+  transform: scale(1.03);
+}
+
+/* SUBSCRIBE/UNSUBSCRIBE BUTTONS */
+.unsubscribe-btn,
+.get-msg-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: white;
+  border: none;
+  margin-left: 4px;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .unsubscribe-btn {
   background-color: #ef4444;
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: white;
-  border: none;
-  margin-left: 4px;
-  flex-shrink: 0;
 }
 
 .unsubscribe-btn:hover {
   background-color: #dc2626;
+  transform: scale(1.05);
 }
 
 .get-msg-btn {
-  background-color: #22c55e;
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: white;
-  border: none;
-  margin-left: 4px;
-  flex-shrink: 0;
+  background-color: #10b981;
 }
 
 .get-msg-btn:hover {
-  background-color: #16a34a;
+  background-color: #059669;
+  transform: scale(1.05);
 }
 
+/* SUBSCRIPTIONS LIST */
 #subscriptions li {
-  margin: 8px 0;
+  margin: 10px 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
+  padding: 10px;
+  background: #1e293b;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.05);
 }
 
+/* MESSAGES BOX */
 #messagesBox {
   margin-top: 20px;
-  background: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  height: 80%;
+  background: #0f172a;
+  padding: 18px;
+  border-radius: 10px;
+  height: 75%;
   overflow-y: auto;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.03);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .left-panel,
+  .center-panel,
+  .right-panel {
+    min-width: 100%;
+    border: none;
+    border-bottom: 1px solid #374151;
+  }
+
+  .center-panel {
+    order: -1;
+  }
 }
