@@ -1,27 +1,13 @@
 let subscribedTopics = [];
 let availableTopics = [];
 
-const baseUrls = [
-  "https://topictide.onrender.com",
-  "https://topictide-2.onrender.com",
-  "https://topictide-3.onrender.com"
-];
-let roundRobinIndex = 0;
-
-function getNextServerUrl() {
-  const url = baseUrls[roundRobinIndex];
-  roundRobinIndex = (roundRobinIndex + 1) % baseUrls.length;
-  return url;
-}
-
 window.onload = async () => {
   await listTopics();
 };
 
 async function listTopics() {
   try {
-    const url = `${getNextServerUrl()}/topics`;
-    const res = await fetch(url);
+    const res = await fetch("https://topictide.onrender.com/topics");
     const topics = await res.json();
     availableTopics = topics;
     populateDropdown();
@@ -57,8 +43,8 @@ function unsubscribeTopic(topic) {
   subscribedTopics = subscribedTopics.filter(t => t !== topic);
   const messagesBox = document.getElementById("messagesBox");
   const messageTitle = document.getElementById("messageTitle");
-  messagesBox.textContent = "Select a topic to view messages.";
-  messageTitle.textContent = "Messages";
+  messagesBox.textContent="Select a topic to view messages.";
+  messageTitle.textContent="Messages"
   populateDropdown();
   updateSubscriptionList();
 }
@@ -95,8 +81,7 @@ async function fetchMessages(topic) {
   messagesBox.innerHTML = "Fetching messages...";
 
   try {
-    const url = `${getNextServerUrl()}/consumer?topic=${encodeURIComponent(topic)}`;
-    const res = await fetch(url);
+    const res = await fetch(`/consumer?topic=${encodeURIComponent(topic)}`);
     const data = await res.json();
 
     if (Array.isArray(data)) {
