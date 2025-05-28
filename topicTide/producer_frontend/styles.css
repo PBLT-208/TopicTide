@@ -1,104 +1,118 @@
 /* General Page Styling */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* bright blue gradient */
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e293b
+  ); /* dark blue gradient */
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f3f4f6;
 }
-.welcome-text {
-    text-align: center;
-    color: #007acc;
-    margin-bottom: 30px;
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+/* Welcome Header Text */
+.page-header {
+  text-align: center;
+  background: linear-gradient(to right, #0f172a, #1e293b);
+  text-align: center;
+  color: #38bdf8;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+
+  padding: 20px 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
 }
 
 /* Form Container Styling */
 .producerInput {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 40px 50px;
-    border-radius: 20px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    width: 100%;
-    max-width: 550px;
-    transition: transform 0.3s ease;
+  background: rgba(30, 41, 59, 0.9); 
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 550px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .producerInput:hover {
-    transform: translateY(-4px);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Form Labels */
 form label {
-    display: block;
-    margin-bottom: 8px;
-    color: #1f2937;
-    font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+  font-weight: 600;
 }
 
-/* Textbox and Textarea Styling with Color */
+/* Inputs and Textarea */
 form input[type="text"],
 #i2 {
-    width: 100%;
-    padding: 14px 16px;
-    margin-bottom: 20px;
-    border: 1.5px solid #90a4ae;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-family: inherit;
-    background-color: #e3f2fd;  /* light sky blue background */
-    color: #0d1b2a;              /* dark blue-gray text */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1.5px solid #334155;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: #1e293b;
+  color: #f1f5f9;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Hover & Focus Effects */
 form input[type="text"]:hover,
 #i2:hover {
-    background-color: #ffffff;
-    border-color: #42a5f5;
+  background-color: #0f172a;
+  border-color: #38bdf8;
 }
 
 form input[type="text"]:focus,
 #i2:focus {
-    border-color: #2196f3;
-    box-shadow: 0 0 6px rgba(33, 150, 243, 0.3);
-    outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 8px rgba(14, 165, 233, 0.4);
+  outline: none;
 }
 
 /* Textarea Specific */
 #i2 {
-    height: 180px;
-    resize: vertical;
+  height: 180px;
+  resize: vertical;
 }
 
-/* Submit Button Styling */
+/* Submit Button */
 form input[type="submit"] {
-    padding: 12px 24px;
-    background: linear-gradient(90deg, #007acc, #005fa3);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 12px 24px;
+  background: linear-gradient(90deg, #0ea5e9, #0284c7);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 form input[type="submit"]:hover {
-    background: linear-gradient(90deg, #005fa3, #004d82);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 95, 163, 0.3);
+  background: linear-gradient(90deg, #0284c7, #0369a1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(2, 132, 199, 0.4);
 }
 
 form input[type="submit"]:active {
-    background-color: #003f6d;
-    transform: translateY(1px);
-    box-shadow: none;
+  background-color: #075985;
+  transform: translateY(1px);
+  box-shadow: none;
 }
