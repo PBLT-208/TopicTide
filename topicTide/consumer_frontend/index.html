@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TopicTide - Consumer</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="page-header">
-    <h1>Welcome Consumer!</h1>
-  </div>
-
-  <div class="main-container">
-    <div class="left-panel">
-      <h2>Available Topics</h2>
-      <select name="topicslist" id="tpclist" autofocus></select>
-      <button onclick="subscribeTopic()">Subscribe</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TopicTide - Consumer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>TopicTide</h1>
+      <h3>Welcome Consumer</h3>
     </div>
 
-    <div class="center-panel">
-      <h2 id="messageTitle">Messages</h2>
-      <div id="messagesBox">Select a topic to view messages.</div>
+    <div class="main-container">
+      <div class="left-panel">
+        <h2>Available Topics</h2>
+        <select name="topicslist" id="tpclist" autofocus></select>
+        <button onclick="subscribeTopic()">Subscribe</button>
+      </div>
+
+      <div class="center-panel">
+        <h2 id="messageTitle">Messages</h2>
+        <div id="messagesBox">Select a topic to view messages.</div>
+      </div>
+
+      <div class="right-panel">
+        <h2>Subscriptions</h2>
+        <ul id="subscriptions"></ul>
+      </div>
     </div>
 
-    <div class="right-panel">
-      <h2>Subscriptions</h2>
-      <ul id="subscriptions"></ul>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
