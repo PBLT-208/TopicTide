@@ -1,4 +1,17 @@
-let producerSocket = new WebSocket('wss://topictide.onrender.com/producer');
+let counter = 0;
+const servers = [
+  'wss://topictide.onrender.com/producer',
+  'wss://topictide-2.onrender.com/producer',
+  'wss://topictide-3.onrender.com/producer'
+];
+
+function getNextServer() {
+  const server = servers[counter % servers.length];
+  counter++;
+  return server;
+}
+
+const producerSocket = new WebSocket(getNextServer());
 
 console.log("Attempting to connect to WebSocket..."); 
 
